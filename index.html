@@ -47,8 +47,31 @@
             } else {
                 console.error('Access token not found.');
             }
-        });
 
+            // Step 2: Use access token to create a playlist
+              fetch('https://api.spotify.com/v1/me/playlists', {
+                method: 'POST',
+                headers: {
+                  'Authorization': 'Bearer ' + accessToken,
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  'name': 'Your Playlist Name',
+                  'description': 'Your Playlist Description',
+                  'public': false // Set to true if you want the playlist to be public
+                })
+              })
+              .then(response => response.json())
+              .then(data => {
+                console.log('Playlist created:', data);
+              })
+              .catch(error => {
+                console.error('Error creating playlist:', error);
+              });
+            })
+            .catch(error => {
+              console.error('Error exchanging authorization code for access token:', error);
+            });
     </script>
 </body>
 </html>
