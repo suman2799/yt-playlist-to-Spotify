@@ -26,22 +26,22 @@
         
         async function main() {
             try {
-            // Example usage:
-            // playlist URL
-            const playlistUrl = 'https://www.youtube.com/playlist?list=PLp6c3tqokHOsquCP7hCjq-fooVsxibJrw';
-        
-            const accessToken = 'BQD5urC_wOfTpdxFZHFp42sHWVds0MJuJPrN1o3zWva70LmIKMtTH48H77O03RJL-07l3fexY6Lmbh_lSGYAOuuSvUW7fALqTInEgxeWv2etA4NvbcgFJSy6vw7Ymp-sTLLHdSzQvJZNN2LT6i7FB7hJgZ0f4sAJl64jrdNjPgKgCDwYD4O0jiyVgPN9nrfKdADkSI8xIPjHjG9LNY7ZB_IyoLm5hQA9zQ';
-        
-            // Playlist ID
-            const plIds  = playlistUrl.match(/list=([a-zA-Z0-9_-]+)/);
-            const playlistId = plIds[1];
-            console.log('Playlist ID:', playlistId);
-        
-            const playlistName = await getPlaylistName(playlistId);
-            console.log('Playlist Name:', playlistName);
-        
-            // convertYouTubePlaylistToSpotify(playlistId, playlistName);
-        
+                // Example usage:
+                // playlist URL
+                const playlistUrl = document.getElementById('playlistUrl').value;
+            
+                const accessToken = 'BQD5urC_wOfTpdxFZHFp42sHWVds0MJuJPrN1o3zWva70LmIKMtTH48H77O03RJL-07l3fexY6Lmbh_lSGYAOuuSvUW7fALqTInEgxeWv2etA4NvbcgFJSy6vw7Ymp-sTLLHdSzQvJZNN2LT6i7FB7hJgZ0f4sAJl64jrdNjPgKgCDwYD4O0jiyVgPN9nrfKdADkSI8xIPjHjG9LNY7ZB_IyoLm5hQA9zQ';
+            
+                // Playlist ID
+                const plIds  = playlistUrl.match(/list=([a-zA-Z0-9_-]+)/);
+                const playlistId = plIds[1];
+                console.log('Playlist ID:', playlistId);
+            
+                const playlistName = await getPlaylistName(playlistId);
+                console.log('Playlist Name:', playlistName);
+            
+                // convertYouTubePlaylistToSpotify(playlistId, playlistName);
+            
             } catch (error) {
                 console.error(error.message);
             }
