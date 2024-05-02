@@ -152,7 +152,7 @@
                                                 throw new Error("\n Access token expired or invalid. Please refresh the token.\n");
                                             }
                                         }).then(data => {
-                                            console.log(data); // Handle the response data here
+                                            console.log(`Song added on Spotify: ${parts[1]} by ${artist}`); // Handle the response data here
                                         }).catch(error => {
                                             console.error('Error:', error);
                                         });
