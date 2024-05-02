@@ -15,8 +15,9 @@
             console.log('Playlist URL:', playlistUrl);
 
             // Playlist Name
-            const playlistId  = playlistUrl.match(/list=([a-zA-Z0-9_-]+)/);
-            console.log('Playlist ID:', playlistId [1]);
+            const plIds  = playlistUrl.match(/list=([a-zA-Z0-9_-]+)/);
+            const playlistId = plIds[1];
+            console.log('Playlist ID:', playlistId);
 
             // Extract the code from the URL
             const urlParams = new URLSearchParams(window.location.search);
@@ -90,6 +91,58 @@
                     .then(response => response.json())
                     .then(data => {
                         console.log('Playlist created:', data);
+
+
+                        // Function to obtain YouTube playlist data
+                        const apiKey = 'AIzaSyAmOeTSpgNxtwcWUbyYuVZfhmIrMDhmsiI';
+                        const apiUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${playlistId}&key=${apiKey}`;
+
+                        fetch(apiUrl)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log(data.items);
+                            const youtubePlaylistData = data.items;
+
+
+                            const lastIndex = youtubePlaylistData.length - 5;
+                            for (const item of youtubePlaylistData.slice(0, lastIndex)) {
+                                const title = item.snippet.title;
+
+                                const parts = title.split(' - ');
+                                console.log(parts);
+
+                                // const artist = item.snippet.channelTitle; // You may need to adjust this to match the artist
+                                const artist = parts[0];
+                                const apiUrl = `https://api.spotify.com/v1/search?q=${parts[1]}+${artist}&type=track`;
+
+                                fetch(apiUrl, {
+                                    headers: {
+                                        'Authorization': `Bearer ${accessToken}`
+                                    }
+                                }).then(response => {
+                                    if (response.status === 401) {
+                                        throw new Error("\n Access token expired or invalid. Please refresh the token.\n");
+                                    }
+                                }).then(data => {
+                                    console.error(data.tracks.items[0]);
+                                }).catch(error => {
+                                    console.error('Error:', error);
+                                });
+
+                            }
+                            
+
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+
+
                     })
                     .catch(error => {
                         console.error('Error creating playlist:', error);
