@@ -8,70 +8,131 @@
 <body>
     <h1>Another Page</h1>
     <script>
-        // Extract the code from the URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const code = urlParams.get('code');
-        
-        // Log the code to the console
-        if (code) {
-            console.log('Authorization code:', code);
-        } else {
-            console.error('Authorization code not found.');
-        }
+        function submitPlaylistUrl() {
 
-        const clientId = '145abc96e9a3498f81ee180c0852430f';
-        const clientSecret = 'ca03adfaabb34cf4b1f6ded93e195fe7';
-        const redirectUri = 'https://suman2799.github.io/yt-playlist-to-Spotify'; // Your redirect URI
-        // const code = 'authorization_code'; // The authorization code obtained from the URL
-        
-        // Step 1: Exchange authorization code for access token
-        fetch('https://accounts.spotify.com/api/token', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Authorization': 'Basic ' + btoa(clientId + ':' + clientSecret)
-          },
-          body: new URLSearchParams({
-            'grant_type': 'authorization_code',
-            'code': code,
-            'redirect_uri': redirectUri
-          })
-        })
-        .then(response => response.json())
-        .then(data => {
-          const accessToken = data.access_token;
+            // playlist URL
+            const playlistUrl = document.getElementById('playlistUrl').value;
+            console.log('Playlist URL:', playlistUrl);
 
-            // Log the accessToken to the console
-            if (accessToken) {
-                console.log('Access token:', accessToken);
+            // Playlist Name
+            const playlistId  = playlistUrl.match(/list=([a-zA-Z0-9_-]+)/);
+            console.log('Playlist ID:', playlistId [1]);
+
+            // Extract the code from the URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const code = urlParams.get('code');
+            
+            // Log the code to the console
+            if (code) {
+                console.log('Authorization code:', code);
             } else {
-                console.error('Access token not found.');
+                console.error('Authorization code not found.');
             }
 
-            // Step 2: Use access token to create a playlist
-              fetch('https://api.spotify.com/v1/me/playlists', {
+            const clientId = '145abc96e9a3498f81ee180c0852430f';
+            const clientSecret = 'ca03adfaabb34cf4b1f6ded93e195fe7';
+            const redirectUri = 'https://suman2799.github.io/yt-playlist-to-Spotify'; // Your redirect URI
+            // const code = 'authorization_code'; // The authorization code obtained from the URL
+            
+            // Step 1: Exchange authorization code for access token
+            fetch('https://accounts.spotify.com/api/token', {
                 method: 'POST',
                 headers: {
-                  'Authorization': 'Bearer ' + accessToken,
-                  'Content-Type': 'application/json'
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Authorization': 'Basic ' + btoa(clientId + ':' + clientSecret)
                 },
-                body: JSON.stringify({
-                  'name': 'Your Playlist Name',
-                  'description': 'Your Playlist Description',
-                  'public': false // Set to true if you want the playlist to be public
+                body: new URLSearchParams({
+                    'grant_type': 'authorization_code',
+                    'code': code,
+                    'redirect_uri': redirectUri
                 })
-              })
-              .then(response => response.json())
-              .then(data => {
-                console.log('Playlist created:', data);
-              })
-              .catch(error => {
-                console.error('Error creating playlist:', error);
-              });
+            })
+            .then(response => response.json())
+            .then(data => {
+                const accessToken = data.access_token;
+
+                // Log the accessToken to the console
+                if (accessToken) {
+                    console.log('Access token:', accessToken);
+                } else {
+                    console.error('Access token not found.');
+                }
+
+
+                // Function to obtain YouTube playlist data
+                const apiKey = 'AIzaSyAmOeTSpgNxtwcWUbyYuVZfhmIrMDhmsiI';
+                const apiUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${playlistId}&key=${apiKey}`;
+
+                fetch(apiUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(data.items);
+
+                    // Playist Name
+                    const apiKey = 'AIzaSyAmOeTSpgNxtwcWUbyYuVZfhmIrMDhmsiI';
+                    const apiUrl = `https://www.googleapis.com/youtube/v3/playlists?key=${apiKey}&id=${playlistId}&part=id,snippet&fields=items(id,snippet(title,channelId,channelTitle))`;
+
+                    fetch(apiUrl)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log(data.items[0].snippet.title);
+
+                        const title = data.items[0].snippet.title;
+
+                        // Step 2: Use access token to create a playlist
+                        fetch('https://api.spotify.com/v1/me/playlists', {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': 'Bearer ' + accessToken,
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                'name': title,
+                                'public': false // Set to true if you want the playlist to be public
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Playlist created:', data);
+                        })
+                        .catch(error => {
+                            console.error('Error creating playlist:', error);
+                        });
+
+
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+
+
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+
+
             })
             .catch(error => {
-              console.error('Error exchanging authorization code for access token:', error);
+                console.error('Error exchanging authorization code for access token:', error);
             });
+        }
+
     </script>
+
+    <label for="playlistUrl">Enter Playlist URL:</label>
+    <input type="text" id="playlistUrl" name="playlistUrl">
+    <button onclick="submitPlaylistUrl()">Submit</button>
+
 </body>
 </html>
