@@ -3,40 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube to Spotify</title>
+    <title>Another Page</title>
 </head>
 <body>
-    <h1>YouTube to Spotify</h1>
-    <button id="loginBtn">Login with Spotify</button>
+    <h1>Another Page</h1>
     <script>
-        const clientId = '145abc96e9a3498f81ee180c0852430f';
-        const redirectUri = 'http://localhost:3000'; // GitHub Pages URL
-
-        // Function to open Spotify authentication page
-        function loginWithSpotify() {
-            const scopes = 'playlist-modify-private'; // Add any required scopes
-            const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scopes)}&response_type=code`;
-
-            // Open Spotify authentication page in a new window
-            window.open(authUrl, '_self');
+        // Retrieve the authorization code from sessionStorage
+        const code = sessionStorage.getItem('spotifyAuthCode');
+        if (code) {
+            console.log('Authorization code:', code);
+        } else {
+            console.error('Authorization code not found.');
         }
-
-        // Event listener for login button click
-        document.getElementById('loginBtn').addEventListener('click', loginWithSpotify);
-
-        // Function to handle redirection from Spotify authentication page
-        function handleRedirect() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const code = urlParams.get('code');
-            if (code) {
-                console.log('Authorization code:', code);
-            } else {
-                console.error('Authorization code not found.');
-            }
-        }
-
-        // Call the handleRedirect function when the page loads
-        window.onload = handleRedirect;
     </script>
 </body>
 </html>
