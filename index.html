@@ -18,6 +18,54 @@
         } else {
             console.error('Authorization code not found.');
         }
+
+        const clientId = '145abc96e9a3498f81ee180c0852430f';
+        const clientSecret = 'ca03adfaabb34cf4b1f6ded93e195fe7';
+        const redirectUri = 'https://accounts.spotify.com/api/token'; // Your redirect URI
+        // const code = 'authorization_code'; // The authorization code obtained from the URL
+        
+        // Step 1: Exchange authorization code for access token
+        fetch('https://accounts.spotify.com/api/token', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': 'Basic ' + btoa(clientId + ':' + clientSecret)
+          },
+          body: new URLSearchParams({
+            'grant_type': 'authorization_code',
+            'code': code,
+            'redirect_uri': redirectUri
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          const accessToken = data.access_token;
+        
+          // Step 2: Use access token to create a playlist
+          fetch('https://api.spotify.com/v1/me/playlists', {
+            method: 'POST',
+            headers: {
+              'Authorization': 'Bearer ' + accessToken,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              'name': 'Your Playlist Name',
+              'description': 'Your Playlist Description',
+              'public': false // Set to true if you want the playlist to be public
+            })
+          })
+          .then(response => response.json())
+          .then(data => {
+            console.log('Playlist created:', data);
+          })
+          .catch(error => {
+            console.error('Error creating playlist:', error);
+          });
+        })
+        .catch(error => {
+          console.error('Error exchanging authorization code for access token:', error);
+        });
+
     </script>
 </body>
 </html>
