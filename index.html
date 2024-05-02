@@ -91,7 +91,7 @@
                     .then(response => response.json())
                     .then(data => {
                         console.log('Playlist created:', data);
-
+                        const spotifyPlaylistId = data.id;
 
                         // Function to obtain YouTube playlist data
                         const apiKey = 'AIzaSyAmOeTSpgNxtwcWUbyYuVZfhmIrMDhmsiI';
@@ -129,13 +129,45 @@
                                         throw new Error("\n Access token expired or invalid. Please refresh the token.\n");
                                     }
                                 }).then(data => {
-                                    console.error(data.tracks.items[0]);
+                                    console.log(data.tracks.items[0]);
+                                    const spotifyTrack = data.tracks.items[0];
+                                    
+                                    if (spotifyTrack) {
+                                        const apiUrl = `https://api.spotify.com/v1/playlists/${spotifyPlaylistId}/tracks`;
+
+                                        fetch(apiUrl, {
+                                            method: 'POST',
+                                            headers: {
+                                                'Authorization': `Bearer ${accessToken}`,
+                                                'Content-Type': 'application/json'
+                                            },
+                                            body: JSON.stringify({
+                                                uris: [spotifyTrack.uri]
+                                            })
+                                        }).then(response => {
+                                            if (response.status === 401) {
+                                                throw new Error("\n Access token expired or invalid. Please refresh the token.\n");
+                                            }
+                                        }).then(data => {
+                                            console.log(data); // Handle the response data here
+                                        }).catch(error => {
+                                            console.error('Error:', error);
+                                        });
+
+                                    } else {
+                                        console.log(`Song not found on Spotify: ${parts[1]} by ${artist}`);
+                                    }
+
+
                                 }).catch(error => {
                                     console.error('Error:', error);
                                 });
 
                             }
-                            
+
+
+                            console.log('Playlist conversion complete.');
+
 
                         })
                         .catch(error => {
