@@ -58,10 +58,10 @@
                     console.error('Access token not found.');
                 }
 
-
-                // Function to obtain YouTube playlist data
+                
+                // Playist Name
                 const apiKey = 'AIzaSyAmOeTSpgNxtwcWUbyYuVZfhmIrMDhmsiI';
-                const apiUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${playlistId}&key=${apiKey}`;
+                const apiUrl = `https://www.googleapis.com/youtube/v3/playlists?key=${apiKey}&id=${playlistId}&part=id,snippet&fields=items(id,snippet(title,channelId,channelTitle))`;
 
                 fetch(apiUrl)
                 .then(response => {
@@ -71,48 +71,28 @@
                     return response.json();
                 })
                 .then(data => {
-                    console.log(data.items);
+                    console.log(data.items[0].snippet.title);
 
-                    // Playist Name
-                    const apiKey = 'AIzaSyAmOeTSpgNxtwcWUbyYuVZfhmIrMDhmsiI';
-                    const apiUrl = `https://www.googleapis.com/youtube/v3/playlists?key=${apiKey}&id=${playlistId}&part=id,snippet&fields=items(id,snippet(title,channelId,channelTitle))`;
+                    const title = data.items[0].snippet.title;
 
-                    fetch(apiUrl)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();
+                    // Step 2: Use access token to create a playlist
+                    fetch('https://api.spotify.com/v1/me/playlists', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': 'Bearer ' + accessToken,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            'name': title,
+                            'public': false // Set to true if you want the playlist to be public
+                        })
                     })
+                    .then(response => response.json())
                     .then(data => {
-                        console.log(data.items[0].snippet.title);
-
-                        const title = data.items[0].snippet.title;
-
-                        // Step 2: Use access token to create a playlist
-                        fetch('https://api.spotify.com/v1/me/playlists', {
-                            method: 'POST',
-                            headers: {
-                                'Authorization': 'Bearer ' + accessToken,
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                'name': title,
-                                'public': false // Set to true if you want the playlist to be public
-                            })
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            console.log('Playlist created:', data);
-                        })
-                        .catch(error => {
-                            console.error('Error creating playlist:', error);
-                        });
-
-
+                        console.log('Playlist created:', data);
                     })
                     .catch(error => {
-                        console.error('Error:', error);
+                        console.error('Error creating playlist:', error);
                     });
 
 
@@ -120,7 +100,7 @@
                 .catch(error => {
                     console.error('Error:', error);
                 });
-
+                
 
             })
             .catch(error => {
