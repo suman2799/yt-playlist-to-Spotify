@@ -115,7 +115,7 @@
                     }
 
                     // Access Token
-                    accessToken = fetchAccessToken(code);
+                    accessToken = await fetchAccessToken(code);
                     console.log('Access Token :', accessToken);
                 
                     const playlistName = await getPlaylistName(playlistId);
