@@ -10,6 +10,8 @@
     <script>
         function submitPlaylistUrl() {
 
+            let spotifyPlaylistId;
+
             // playlist URL
             const playlistUrl = document.getElementById('playlistUrl').value;
             console.log('Playlist URL:', playlistUrl);
@@ -91,7 +93,7 @@
                     .then(response => response.json())
                     .then(data => {
                         console.log('Playlist created:', data);
-                        const spotifyPlaylistId = data.id;
+                        spotifyPlaylistId = data.id;
 
                         // Function to obtain YouTube playlist data
                         const apiKey = 'AIzaSyAmOeTSpgNxtwcWUbyYuVZfhmIrMDhmsiI';
