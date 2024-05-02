@@ -10,6 +10,16 @@
     <script>
         
             let accessToken;
+
+            // Function to obtain YouTube playlist data
+            async function fetchYouTubePlaylistData(playlistId) {
+                const apiKey = 'AIzaSyAmOeTSpgNxtwcWUbyYuVZfhmIrMDhmsiI';
+                const apiUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${playlistId}&key=${apiKey}`;
+
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+            return data.items;
+}
             
             // Function to get YouTube playlist name
             async function getPlaylistName(playlistId) {
@@ -50,6 +60,45 @@
                 return data.id; // Return the ID of the newly created playlist
             }
 
+            // Function to search for a song on Spotify
+            async function searchSongOnSpotify(songTitle, artist) {
+                const apiUrl = `https://api.spotify.com/v1/search?q=${songTitle}+${artist}&type=track`;
+
+                const response = await fetch(apiUrl, {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                });
+                const data = await response.json();
+
+                if (response.status === 401) {
+                    throw new Error("\n Access token expired or invalid. Please refresh the token.\n");
+                }
+
+                return data.tracks.items[0]; // Return the first search result
+            }
+
+            // Function to add a song to a Spotify playlist
+            async function addSongToSpotifyPlaylist(playlistId, trackUri) {
+                const apiUrl = `https://api.spotify.com/v1/playlists/${playlistId}/tracks`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        uris: [trackUri]
+                    })
+                });
+                const data = await response.json();
+
+                if (response.status === 401) {
+                    throw new Error("\n Access token expired or invalid. Please refresh the token.\n");
+                }
+            }
+
             // Function to get accessToken
             async function fetchAccessToken(code) {
                 const clientId = '145abc96e9a3498f81ee180c0852430f';
@@ -82,9 +131,28 @@
             // Main function to convert YouTube playlist to Spotify playlist
             async function convertYouTubePlaylistToSpotify(youtubePlaylistId, spotifyPlaylistName) {
                 try {
-                    // const youtubePlaylistData = await fetchYouTubePlaylistData(youtubePlaylistId);
+                    const youtubePlaylistData = await fetchYouTubePlaylistData(youtubePlaylistId);
                     const spotifyPlaylistId = await createSpotifyPlaylist(spotifyPlaylistName);
                     console.log('Spotify Playlist Id: ', spotifyPlaylistId);
+
+                    const lastIndex = youtubePlaylistData.length - 5;
+                    for (const item of youtubePlaylistData.slice(0, lastIndex)) {
+                        const title = item.snippet.title;
+
+                        const parts = title.split(' - ');
+                        console.log(parts);
+
+                        // const artist = item.snippet.channelTitle; // You may need to adjust this to match the artist
+                        const artist = parts[0];
+                        const spotifyTrack = await searchSongOnSpotify(parts[1], artist);
+
+                        if (spotifyTrack) {
+                            await addSongToSpotifyPlaylist(spotifyPlaylistId, spotifyTrack.uri);
+                        } else {
+                            console.log(`Song not found on Spotify: ${parts[1]} by ${artist}`);
+                        }
+                    }
+                    console.log('Playlist conversion complete.');
 
                 } catch (error) {
                     console.error(error.message);
