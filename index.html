@@ -8,8 +8,11 @@
 <body>
     <h1>Another Page</h1>
     <script>
-        // Retrieve the authorization code from sessionStorage
-        const code = sessionStorage.getItem('spotifyAuthCode');
+        // Extract the code from the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+        
+        // Log the code to the console
         if (code) {
             console.log('Authorization code:', code);
         } else {
