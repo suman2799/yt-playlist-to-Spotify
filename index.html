@@ -133,6 +133,7 @@
                                     const spotifyTrack = data.tracks.items[0];
                                     
                                     if (spotifyTrack) {
+                                        console.log('spotifyPlaylistId:', spotifyPlaylistId);
                                         const apiUrl = `https://api.spotify.com/v1/playlists/${spotifyPlaylistId}/tracks`;
 
                                         fetch(apiUrl, {
