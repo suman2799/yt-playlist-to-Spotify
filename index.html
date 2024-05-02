@@ -8,200 +8,51 @@
 <body>
     <h1>Another Page</h1>
     <script>
-        function submitPlaylistUrl() {
-
-            let spotifyPlaylistId;
-
+        // Function to get YouTube playlist name
+        async function getPlaylistName(playlistId) {
+            const apiKey = 'AIzaSyAmOeTSpgNxtwcWUbyYuVZfhmIrMDhmsiI';
+            const apiUrl = `https://www.googleapis.com/youtube/v3/playlists?key=${apiKey}&id=${playlistId}&part=id,snippet&fields=items(id,snippet(title,channelId,channelTitle))`;
+        
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                
+                return data.items[0].snippet.title;
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+        
+        
+        async function main() {
+            try {
+            // Example usage:
             // playlist URL
-            const playlistUrl = document.getElementById('playlistUrl').value;
-            console.log('Playlist URL:', playlistUrl);
-
-            // Playlist Name
+            const playlistUrl = 'https://www.youtube.com/playlist?list=PLp6c3tqokHOsquCP7hCjq-fooVsxibJrw';
+        
+            const accessToken = 'BQD5urC_wOfTpdxFZHFp42sHWVds0MJuJPrN1o3zWva70LmIKMtTH48H77O03RJL-07l3fexY6Lmbh_lSGYAOuuSvUW7fALqTInEgxeWv2etA4NvbcgFJSy6vw7Ymp-sTLLHdSzQvJZNN2LT6i7FB7hJgZ0f4sAJl64jrdNjPgKgCDwYD4O0jiyVgPN9nrfKdADkSI8xIPjHjG9LNY7ZB_IyoLm5hQA9zQ';
+        
+            // Playlist ID
             const plIds  = playlistUrl.match(/list=([a-zA-Z0-9_-]+)/);
             const playlistId = plIds[1];
             console.log('Playlist ID:', playlistId);
-
-            // Extract the code from the URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const code = urlParams.get('code');
-            
-            // Log the code to the console
-            if (code) {
-                console.log('Authorization code:', code);
-            } else {
-                console.error('Authorization code not found.');
+        
+            const playlistName = await getPlaylistName(playlistId);
+            console.log('Playlist Name:', playlistName);
+        
+            // convertYouTubePlaylistToSpotify(playlistId, playlistName);
+        
+            } catch (error) {
+                console.error(error.message);
             }
-
-            const clientId = '145abc96e9a3498f81ee180c0852430f';
-            const clientSecret = 'ca03adfaabb34cf4b1f6ded93e195fe7';
-            const redirectUri = 'https://suman2799.github.io/yt-playlist-to-Spotify'; // Your redirect URI
-            // const code = 'authorization_code'; // The authorization code obtained from the URL
-            
-            // Step 1: Exchange authorization code for access token
-            fetch('https://accounts.spotify.com/api/token', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Authorization': 'Basic ' + btoa(clientId + ':' + clientSecret)
-                },
-                body: new URLSearchParams({
-                    'grant_type': 'authorization_code',
-                    'code': code,
-                    'redirect_uri': redirectUri
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                const accessToken = data.access_token;
-
-                // Log the accessToken to the console
-                if (accessToken) {
-                    console.log('Access token:', accessToken);
-                } else {
-                    console.error('Access token not found.');
-                }
-
-                
-                // Playist Name
-                const apiKey = 'AIzaSyAmOeTSpgNxtwcWUbyYuVZfhmIrMDhmsiI';
-                const apiUrl = `https://www.googleapis.com/youtube/v3/playlists?key=${apiKey}&id=${playlistId}&part=id,snippet&fields=items(id,snippet(title,channelId,channelTitle))`;
-
-                fetch(apiUrl)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log(data.items[0].snippet.title);
-
-                    const title = data.items[0].snippet.title;
-
-                    // Step 2: Use access token to create a playlist
-                    fetch('https://api.spotify.com/v1/me/playlists', {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': 'Bearer ' + accessToken,
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            'name': title,
-                            'public': false // Set to true if you want the playlist to be public
-                        })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log('Playlist created:', data);
-                        spotifyPlaylistId = data.id;
-
-                        // Function to obtain YouTube playlist data
-                        const apiKey = 'AIzaSyAmOeTSpgNxtwcWUbyYuVZfhmIrMDhmsiI';
-                        const apiUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${playlistId}&key=${apiKey}`;
-
-                        fetch(apiUrl)
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error('Network response was not ok');
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            console.log(data.items);
-                            const youtubePlaylistData = data.items;
-
-
-                            const lastIndex = youtubePlaylistData.length - 5;
-                            for (const item of youtubePlaylistData.slice(0, lastIndex)) {
-                                const title = item.snippet.title;
-
-                                const parts = title.split(' - ');
-                                console.log(parts);
-
-                                // const artist = item.snippet.channelTitle; // You may need to adjust this to match the artist
-                                const artist = parts[0];
-                                const apiUrl = `https://api.spotify.com/v1/search?q=${parts[1]}+${artist}&type=track`;
-
-                                fetch(apiUrl, {
-                                    headers: {
-                                        'Authorization': `Bearer ${accessToken}`
-                                    }
-                                }).then(response => {
-                                    if (response.status === 401) {
-                                        throw new Error("\n Access token expired or invalid. Please refresh the token.\n");
-                                    }
-                                    return response.json();
-                                }).then(data => {
-                                    console.log(data.tracks.items[0]);
-                                    const spotifyTrack = data.tracks.items[0];
-                                    
-                                    if (spotifyTrack) {
-                                        console.log('spotifyPlaylistId:', spotifyPlaylistId);
-                                        const apiUrl = `https://api.spotify.com/v1/playlists/${spotifyPlaylistId}/tracks`;
-
-                                        fetch(apiUrl, {
-                                            method: 'POST',
-                                            headers: {
-                                                'Authorization': `Bearer ${accessToken}`,
-                                                'Content-Type': 'application/json'
-                                            },
-                                            body: JSON.stringify({
-                                                uris: [spotifyTrack.uri]
-                                            })
-                                        }).then(response => {
-                                            if (response.status === 401) {
-                                                throw new Error("\n Access token expired or invalid. Please refresh the token.\n");
-                                            }
-                                        }).then(data => {
-                                            console.log(`Song added on Spotify: ${parts[1]} by ${artist}`); // Handle the response data here
-                                        }).catch(error => {
-                                            console.error('Error:', error);
-                                        });
-
-                                    } else {
-                                        console.log(`Song not found on Spotify: ${parts[1]} by ${artist}`);
-                                    }
-
-
-                                }).catch(error => {
-                                    console.error('Error:', error);
-                                });
-
-                            }
-
-
-                            console.log('Playlist conversion complete.');
-
-
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                        });
-
-
-                    })
-                    .catch(error => {
-                        console.error('Error creating playlist:', error);
-                    });
-
-
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-                
-
-            })
-            .catch(error => {
-                console.error('Error exchanging authorization code for access token:', error);
-            });
-        }
-
+        }//End of main()
+        
+        main(); // Call the main function to start execution
     </script>
 
     <label for="playlistUrl">Enter Playlist URL:</label>
     <input type="text" id="playlistUrl" name="playlistUrl">
-    <button onclick="submitPlaylistUrl()">Submit</button>
+    <button onclick="main()">Submit</button>
 
 </body>
 </html>
