@@ -77,7 +77,8 @@
 
         // Function to obtain YouTube playlist data
         async function fetchYouTubePlaylistData(playlistId) {
-            const apiKey = 'AIzaSyAmOeTSpgNxtwcWUbyYuVZfhmIrMDhmsiI';
+            // const apiKey = 'AIzaSyAmOeTSpgNxtwcWUbyYuVZfhmIrMDhmsiI';
+            const apiKey = 'AIzaSyAmOeTSpgNxtwcWUbyYuVZfhmIrMDhmsil';
             const apiUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${playlistId}&key=${apiKey}`;
 
             const response = await fetch(apiUrl);
@@ -203,6 +204,7 @@
             let errorMessage = document.getElementById("errorMessage");
             errorMessage.style.display = "block";
             errorMessage.innerHTML = message;
+            throw new Error(message); // Throw an error to stop execution
         }
 
         // Main function to convert YouTube playlist to Spotify playlist
