@@ -7,62 +7,63 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #121212; /* Dark background similar to Spotify */
-            color: #fff; /* White text for better contrast */
+            background-color: #191414; /* Spotify's background color */
+            color: #FFFFFF; /* White text */
             margin: 0;
             padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
 
-        h1 {
-            color: #1DB954; /* Spotify green for heading */
+        .container {
+            max-width: 500px;
+            width: 100%;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #1DB954; /* Spotify's green accent color */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             text-align: center;
-            margin-top: 2rem;
         }
 
-        label {
-            display: block;
-            margin: 1rem 0 0.5rem 0;
-            color: #fff; /* White label text */
+        .input-group {
+            margin-bottom: 20px;
         }
 
         input[type="text"] {
             width: 100%;
-            padding: 0.5rem;
-            margin-bottom: 1rem;
-            border-radius: 0.4rem;
+            padding: 10px;
             border: none;
-            background-color: #292929; /* Darker background for input */
-            color: #fff; /* White text */
+            border-radius: 5px;
+            margin-top: 5px;
         }
 
         button {
-            padding: 0.5rem 1rem;
-            background-color: #1DB954; /* Spotify green for button */
+            padding: 10px 20px;
+            background-color: #191414; /* Spotify's background color */
+            color: #FFFFFF; /* White text */
             border: none;
-            border-radius: 0.4rem;
-            color: #fff; /* White text */
+            border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
 
         button:hover {
-            background-color: #1ED760; /* Slightly lighter green on hover */
+            background-color: #383838; /* Darker shade of Spotify's background color */
         }
 
         .message {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #212121; /* Dark background for message */
-            color: #fff; /* White text */
-            padding: 1rem;
-            margin-top: 1rem;
-            border-radius: 0.4rem;
-            border: 0.1rem solid #1DB954; /* Green border */
+            color: #FFFFFF; /* White text */
+            font-weight: bold;
+            margin-top: 20px;
         }
 
-        #dispMessage {
-            display: none;
+        .error {
+            background-color: #FF4136; /* Spotify's red accent color */
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
         }
     </style>
 
@@ -376,15 +377,15 @@
     
 </head>
 <body>
-    <h1>Convert YouTube Playlist to Spotify</h1>
-
-    <label for="playlistUrl">Enter Playlist URL:</label>
-    <input type="text" id="playlistUrl" name="playlistUrl">
-    <button onclick="main()">Submit</button>
-
-    <!-- Display Appropriate Messages. -->
-    <div class="message" id="message">
-        <div id="dispMessage"></div>
+    <div class="container">
+        <h1>Convert YouTube Playlist to Spotify</h1>
+        <div class="input-group">
+            <label for="playlistUrl">Enter Playlist URL:</label>
+            <input type="text" id="playlistUrl" name="playlistUrl">
+        </div>
+        <button onclick="main()">Submit</button>
+        <div class="message" id="dispMessage"></div>
+        <div class="error" id="errorMessage" style="display: none;"></div>
     </div>
 </body>
 </html>
