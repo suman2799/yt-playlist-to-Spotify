@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube to Spotify</title>
+</head>
+<body>
+    <h1>YouTube to Spotify</h1>
+    <button id="loginBtn">Login with Spotify</button>
+    <script>
+        const clientId = '145abc96e9a3498f81ee180c0852430f';
+        const redirectUri = 'https://suman2799.github.io/yt-playlist-to-Spotify'; // GitHub Pages URL
+
+        // Function to open Spotify authentication page
+        function loginWithSpotify() {
+            const scopes = 'playlist-modify-private'; // Add any required scopes
+            const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scopes)}&response_type=code&show_dialog=true`;
+
+            // Open Spotify authentication page in a new window
+            window.open(authUrl, '_self');
+        }
+
+        // Event listener for login button click
+        document.getElementById('loginBtn').addEventListener('click', loginWithSpotify);
+
+        // Call the handleRedirect function when the page loads
+        window.onload = handleRedirect;
+    </script>
+</body>
+</html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convert YouTube Playlist to Spotify</title>
+    <style>
+        body {
+            font-family: 'Circular', Arial, sans-serif; /* Spotify's font */
+            font-weight: 700;
+            background-color: #191414; /* Spotify's background color */
+            color: #FFFFFF; /* White text */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 100%;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #1DB954; /* Spotify's green accent color */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            width: 90%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #191414; /* Spotify's background color */
+            color: #FFFFFF; /* White text */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #383838; /* Darker shade of Spotify's background color */
+        }
+
+        .message {
+            background-color: #007bff; /* Blue background */
+            color: #FFFFFF; /* White text */
+            font-weight: bold;
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            display: none; /* Initially hidden */
+        }
+
+        .error {
+            background-color: #FF4136; /* Spotify's red accent color */
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+    </style>
+
+    <!-- Include Spotify font -->
+    <link href="https://fonts.googleapis.com/css2?family=Circular:wght@400;700&display=swap" rel="stylesheet">
+
+    <script>
+        
+        let accessToken;
+
+        // Function to obtain YouTube playlist data
+        async function fetchYouTubePlaylistData(playlistId) {
+            const apiKey = 'AIzaSyAmOeTSpgNxtwcWUbyYuVZfhmIrMDhmsiI';
+            const apiUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${playlistId}&key=${apiKey}`;
+
+            const response = await fetch(apiUrl);
+            const data = await response.json();
+
+            if (response.status < 200 || response.status >= 300) {
+                showError("Error fetching YouTube playlist data.");
+            }
+
+            return data.items;
+        }
+        
+        // Function to get YouTube playlist name
+        async function getPlaylistName(playlistId) {
+            const apiKey = 'AIzaSyAmOeTSpgNxtwcWUbyYuVZfhmIrMDhmsiI';
+            const apiUrl = `https://www.googleapis.com/youtube/v3/playlists?key=${apiKey}&id=${playlistId}&part=id,snippet&fields=items(id,snippet(title,channelId,channelTitle))`;
+        
+            const response = await fetch(apiUrl);
+            const data = await response.json();
+            
+            if (response.status < 200 || response.status >= 300) {
+                showError("Error getting playlist name.");
+            }
+
+            return data.items[0].snippet.title;
+        }
+        
+        // Function to create a new playlist on Spotify
+        async function createSpotifyPlaylist(playlistName) {
+            const apiUrl = `https://api.spotify.com/v1/me/playlists`;
+        
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    'name': playlistName,
+                    'public': false // Change to true if you want the playlist to be public
+                })
+            });
+            const data = await response.json();
+            
+            if (response.status === 401) {
+                showError("Access token expired or invalid. Please refresh the token.");
+            } else if (response.status < 200 || response.status >= 300) {
+                showError("Error creating Spotify playlist.");
+            }
+        
+            return data.id; // Return the ID of the newly created playlist
+        }
+
+        // Function to search for a song on Spotify
+        async function searchSongOnSpotify(songTitle, artist) {
+            const apiUrl = `https://api.spotify.com/v1/search?q=${songTitle}+${artist}&type=track`;
+
+            const response = await fetch(apiUrl, {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            });
+            const data = await response.json();
+
+            if (response.status === 401) {
+                showError("Access token expired or invalid. Please refresh the token.");
+            } else if (response.status < 200 || response.status >= 300) {
+                showError("Error searching song on Spotify.");
+            }
+
+            return data.tracks.items[0]; // Return the first search result
+        }
+
+        // Function to add a song to a Spotify playlist
+        async function addSongToSpotifyPlaylist(playlistId, trackUri) {
+            const apiUrl = `https://api.spotify.com/v1/playlists/${playlistId}/tracks`;
+
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    uris: [trackUri]
+                })
+            });
+
+            if (response.status === 401) {
+                showError("Access token expired or invalid. Please refresh the token.");
+            } else if (response.status < 200 || response.status >= 300) {
+                showError("Error adding songs to Spotify playlist.");
+            }
+        }
+
+        // Function to get accessToken
+        async function fetchAccessToken(code) {
+            const clientId = '145abc96e9a3498f81ee180c0852430f';
+            const clientSecret = 'ca03adfaabb34cf4b1f6ded93e195fe7';
+            const redirectUri = 'https://suman2799.github.io/yt-playlist-to-Spotify'; // Your redirect URI
+            const apiUrl = `https://accounts.spotify.com/api/token`;
+        
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Authorization': 'Basic ' + btoa(clientId + ':' + clientSecret)
+                },
+                body: new URLSearchParams({
+                    'grant_type': 'authorization_code',
+                    'code': code,
+                    'redirect_uri': redirectUri
+                })
+            });
+            const data = await response.json();
+
+            if (response.status === 401) {
+                showError("Error exchanging authorization code for access token.");
+            } else if (response.status < 200 || response.status >= 300) {
+                showError("Error getting access token.");
+            }
+        
+            return data.access_token; // Return accessToken
+        }
+
+        // Function to display error message
+        function showError(message) {
+            let errorMessage = document.getElementById("errorMessage");
+            errorMessage.style.display = "block";
+            errorMessage.innerHTML = message;
+            // throw new Error(message); // Throw an error to stop execution
+        }
+
+        // Main function to convert YouTube playlist to Spotify playlist
+        async function convertYouTubePlaylistToSpotify(youtubePlaylistId, spotifyPlaylistName) {
+            try {
+                const youtubePlaylistData = await fetchYouTubePlaylistData(youtubePlaylistId);
+                const spotifyPlaylistId = await createSpotifyPlaylist(spotifyPlaylistName);
+
+                const lastIndex = youtubePlaylistData.length - 5;
+                for (const item of youtubePlaylistData.slice(0, lastIndex)) {
+                    const title = item.snippet.title;
+
+                    const parts = title.split(' - ');
+
+                    const artist = parts[0];
+                    const spotifyTrack = await searchSongOnSpotify(parts[1], artist);
+
+                    if (spotifyTrack) {
+                        await addSongToSpotifyPlaylist(spotifyPlaylistId, spotifyTrack.uri);
+                    } else {
+                        showError(`Song not found on Spotify: ${parts[1]} by ${artist}`);
+                    }
+                }
+                // console.log('Playlist conversion complete.');
+                let successMessage = document.getElementById("successMessage");
+                successMessage.style.display = "block";
+                successMessage.innerHTML = "Playlist conversion completed successfully.";
+
+            } catch (error) {
+                // showError(error.message);
+            }
+        }
+
+        async function main() {
+            try {
+                // Example usage:
+                // playlist URL
+                const playlistUrl = document.getElementById('playlistUrl').value;
+            
+                // Playlist ID
+                const plIds  = playlistUrl.match(/list=([a-zA-Z0-9_-]+)/);
+                const playlistId = plIds[1];
+
+                // Extract the code from the URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const code = urlParams.get('code');
+                
+                // Access Token
+                accessToken = await fetchAccessToken(code);
+            
+                const playlistName = await getPlaylistName(playlistId);
+            
+                convertYouTubePlaylistToSpotify(playlistId, playlistName);
+            
+            } catch (error) {
+                // showError(error.message);
+            }
+        }
+
+        main(); // Call the main function to start execution
+    </script>
+    
+</head>
+<body>
+    <div class="container">
+        <h1>YouTube Playlist to Spotify</h1>
+        <div class="input-group">
+            <label for="playlistUrl">Enter YouTube Playlist URL:</label>
+            <input type="text" id="playlistUrl" name="playlistUrl">
+        </div>
+        <button onclick="main()">Submit</button>
+        <div class="message" id="successMessage" style="display: none;"></div>
+        <div class="error" id="errorMessage" style="display: none;"></div>
+    </div>
+</body>
+</html>
