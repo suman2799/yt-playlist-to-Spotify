@@ -47,7 +47,8 @@
             
             // Function to get YouTube playlist name
             async function getPlaylistName(playlistId) {
-                const apiKey = 'AIzaSyAmOeTSpgNxtwcWUbyYuVZfhmIrMDhmsiI';
+                // const apiKey = 'AIzaSyAmOeTSpgNxtwcWUbyYuVZfhmIrMDhmsiI';
+                const apiKey = 'AIzaSyAmOeTSpgNxtwcWUbyYuVZfhmIrMDhmsil';
                 const apiUrl = `https://www.googleapis.com/youtube/v3/playlists?key=${apiKey}&id=${playlistId}&part=id,snippet&fields=items(id,snippet(title,channelId,channelTitle))`;
             
                 const response = await fetch(apiUrl);
@@ -102,7 +103,7 @@
                         dispMessage.style.display = "none";
                     } else {
                         dispMessage.style.display = "flex";
-                        dispMessage.innerHTML = "Error getting playlist name.";
+                        dispMessage.innerHTML = "Error creating spotify playlist.";
                     }
                 }
             
@@ -138,7 +139,7 @@
                         dispMessage.style.display = "none";
                     } else {
                         dispMessage.style.display = "flex";
-                        dispMessage.innerHTML = "Error getting playlist name.";
+                        dispMessage.innerHTML = "Error searching song on spotify.";
                     }
                 }
 
@@ -179,7 +180,7 @@
                         dispMessage.style.display = "none";
                     } else {
                         dispMessage.style.display = "flex";
-                        dispMessage.innerHTML = "Error getting playlist name.";
+                        dispMessage.innerHTML = "Error adding songs to spotify playlist.";
                     }
                 }
             }
@@ -223,7 +224,7 @@
                         dispMessage.style.display = "none";
                     } else {
                         dispMessage.style.display = "flex";
-                        dispMessage.innerHTML = "Error getting playlist name.";
+                        dispMessage.innerHTML = "Error getting access token.";
                     }
                 }
             
@@ -253,7 +254,6 @@
                             await addSongToSpotifyPlaylist(spotifyPlaylistId, spotifyTrack.uri);
                         } else {
                             // console.log(`Song not found on Spotify: ${parts[1]} by ${artist}`);
-
                             let dispMessage = document.getElementById("dispMessage");
 
                             if (dispMessage.style.display == "flex") {
@@ -299,7 +299,15 @@
                     if (code) {
                         console.log('Authorization code:', code);
                     } else {
-                        console.error('Authorization code not found.');
+                        // console.error('Authorization code not found.');
+                        let dispMessage = document.getElementById("dispMessage");
+
+                        if (dispMessage.style.display == "flex") {
+                            dispMessage.style.display = "none";
+                        } else {
+                            dispMessage.style.display = "flex";
+                            dispMessage.innerHTML = "Authorization code not found.";
+                        }
                     }
 
                     // Access Token
@@ -319,7 +327,7 @@
                         dispMessage.style.display = "none";
                     } else {
                         dispMessage.style.display = "flex";
-                        dispMessage.innerHTML = "Error getting playlist name.";
+                        dispMessage.innerHTML = "An error occured.";
                     }
                 }
             }//End of main()
