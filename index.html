@@ -55,9 +55,13 @@
         }
 
         .message {
+            background-color: #007bff; /* Blue background */
             color: #FFFFFF; /* White text */
             font-weight: bold;
             margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            display: none; /* Initially hidden */
         }
 
         .error {
@@ -232,7 +236,10 @@
                         showError(`Song not found on Spotify: ${parts[1]} by ${artist}`);
                     }
                 }
-                console.log('Playlist conversion complete.');
+                // console.log('Playlist conversion complete.');
+                let successMessage = document.getElementById("successMessage");
+                successMessage.style.display = "block";
+                successMessage.innerHTML = message;
 
             } catch (error) {
                 // showError(error.message);
@@ -277,6 +284,7 @@
             <input type="text" id="playlistUrl" name="playlistUrl">
         </div>
         <button onclick="main()">Submit</button>
+        <div class="message" id="successMessage" style="display: none;"></div>
         <div class="error" id="errorMessage" style="display: none;"></div>
     </div>
 </body>
