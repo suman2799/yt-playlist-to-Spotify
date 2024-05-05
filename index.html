@@ -232,7 +232,7 @@
                 console.log('Playlist conversion complete.');
 
             } catch (error) {
-                // showError("An error occurred.");
+                showError(error.message);
             }
         }
 
@@ -258,7 +258,7 @@
                 convertYouTubePlaylistToSpotify(playlistId, playlistName);
             
             } catch (error) {
-                // showError("An error occurred.");
+                showError(showError(error.message););
             }
         }
 
@@ -268,9 +268,9 @@
 </head>
 <body>
     <div class="container">
-        <h1>Convert YouTube Playlist to Spotify</h1>
+        <h1>YouTube Playlist to Spotify</h1>
         <div class="input-group">
-            <label for="playlistUrl">Enter Playlist URL:</label>
+            <label for="playlistUrl">Enter YouTube Playlist URL:</label>
             <input type="text" id="playlistUrl" name="playlistUrl">
         </div>
         <button onclick="main()">Submit</button>
