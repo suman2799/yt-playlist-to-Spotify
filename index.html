@@ -10,6 +10,13 @@
 
     <style>
 
+        .message {
+            padding: 0.1rem 2rem 0.1rem 2rem;
+            background-color: #ffdeda;
+            border-radius: 0.6rem;
+            margin: 0.5rem 0 0.5rem 0;
+        }
+
         #dispMessage {
             display: none;
             color: #4b4a4a;
@@ -21,7 +28,7 @@
             border: 0.1rem solid rgb(196, 72, 58);
             border-radius: 1rem;
         }
-        
+
     </style>
 
     <script>
@@ -48,7 +55,7 @@
                 const data = await response.json();
                     
                 if (response.status != 200) {
-                    let dispMessage = document.getElementById("dispAnswer");
+                    let dispMessage = document.getElementById("dispMessage");
 
                     if (dispMessage.style.display == "flex") {
                         dispMessage.style.display = "none";
