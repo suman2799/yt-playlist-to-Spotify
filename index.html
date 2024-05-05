@@ -47,8 +47,7 @@
             
             // Function to get YouTube playlist name
             async function getPlaylistName(playlistId) {
-                // const apiKey = 'AIzaSyAmOeTSpgNxtwcWUbyYuVZfhmIrMDhmsiI';
-                const apiKey = 'AIzaSyAmOeTSpgNxtwcWUbyYuVZfhmIrMDhmsil';
+                const apiKey = 'AIzaSyAmOeTSpgNxtwcWUbyYuVZfhmIrMDhmsiI';
                 const apiUrl = `https://www.googleapis.com/youtube/v3/playlists?key=${apiKey}&id=${playlistId}&part=id,snippet&fields=items(id,snippet(title,channelId,channelTitle))`;
             
                 const response = await fetch(apiUrl);
@@ -63,7 +62,6 @@
                         dispMessage.style.display = "flex";
                         dispMessage.innerHTML = "Error getting playlist name.";
                     }
-                    // console.error('Error:', error);
                 }
 
                 return data.items[0].snippet.title;
@@ -87,7 +85,25 @@
                 const data = await response.json();
             
                 if (response.status === 401) {
-                    throw new Error("\n Access token expired or invalid. Please refresh the token.\n");
+                    // throw new Error("\n Access token expired or invalid. Please refresh the token.\n");
+                    let dispMessage = document.getElementById("dispMessage");
+
+                    if (dispMessage.style.display == "flex") {
+                        dispMessage.style.display = "none";
+                    } else {
+                        dispMessage.style.display = "flex";
+                        dispMessage.innerHTML = "Access token expired or invalid. Please refresh the token.";
+                    }
+                }
+                else if (response.status != 200) {
+                    let dispMessage = document.getElementById("dispMessage");
+
+                    if (dispMessage.style.display == "flex") {
+                        dispMessage.style.display = "none";
+                    } else {
+                        dispMessage.style.display = "flex";
+                        dispMessage.innerHTML = "Error getting playlist name.";
+                    }
                 }
             
                 return data.id; // Return the ID of the newly created playlist
@@ -105,7 +121,25 @@
                 const data = await response.json();
 
                 if (response.status === 401) {
-                    throw new Error("\n Access token expired or invalid. Please refresh the token.\n");
+                    // throw new Error("\n Access token expired or invalid. Please refresh the token.\n");
+                    let dispMessage = document.getElementById("dispMessage");
+
+                    if (dispMessage.style.display == "flex") {
+                        dispMessage.style.display = "none";
+                    } else {
+                        dispMessage.style.display = "flex";
+                        dispMessage.innerHTML = "Access token expired or invalid. Please refresh the token.";
+                    }
+                }
+                else if (response.status != 200) {
+                    let dispMessage = document.getElementById("dispMessage");
+
+                    if (dispMessage.style.display == "flex") {
+                        dispMessage.style.display = "none";
+                    } else {
+                        dispMessage.style.display = "flex";
+                        dispMessage.innerHTML = "Error getting playlist name.";
+                    }
                 }
 
                 return data.tracks.items[0]; // Return the first search result
@@ -128,7 +162,25 @@
                 const data = await response.json();
 
                 if (response.status === 401) {
-                    throw new Error("\n Access token expired or invalid. Please refresh the token.\n");
+                    // throw new Error("\n Access token expired or invalid. Please refresh the token.\n");
+                    let dispMessage = document.getElementById("dispMessage");
+
+                    if (dispMessage.style.display == "flex") {
+                        dispMessage.style.display = "none";
+                    } else {
+                        dispMessage.style.display = "flex";
+                        dispMessage.innerHTML = "Access token expired or invalid. Please refresh the token.";
+                    }
+                }
+                else if (response.status != 200) {
+                    let dispMessage = document.getElementById("dispMessage");
+
+                    if (dispMessage.style.display == "flex") {
+                        dispMessage.style.display = "none";
+                    } else {
+                        dispMessage.style.display = "flex";
+                        dispMessage.innerHTML = "Error getting playlist name.";
+                    }
                 }
             }
 
@@ -154,7 +206,25 @@
                 const data = await response.json();
             
                 if (response.status === 401) {
-                    throw new Error("\n Error exchanging authorization code for access token.\n");
+                    // throw new Error("\n Access token expired or invalid. Please refresh the token.\n");
+                    let dispMessage = document.getElementById("dispMessage");
+
+                    if (dispMessage.style.display == "flex") {
+                        dispMessage.style.display = "none";
+                    } else {
+                        dispMessage.style.display = "flex";
+                        dispMessage.innerHTML = "Error exchanging authorization code for access token.";
+                    }
+                }
+                else if (response.status != 200) {
+                    let dispMessage = document.getElementById("dispMessage");
+
+                    if (dispMessage.style.display == "flex") {
+                        dispMessage.style.display = "none";
+                    } else {
+                        dispMessage.style.display = "flex";
+                        dispMessage.innerHTML = "Error getting playlist name.";
+                    }
                 }
             
                 return data.access_token; // Return accessToken
@@ -182,15 +252,33 @@
                         if (spotifyTrack) {
                             await addSongToSpotifyPlaylist(spotifyPlaylistId, spotifyTrack.uri);
                         } else {
-                            console.log(`Song not found on Spotify: ${parts[1]} by ${artist}`);
+                            // console.log(`Song not found on Spotify: ${parts[1]} by ${artist}`);
+
+                            let dispMessage = document.getElementById("dispMessage");
+
+                            if (dispMessage.style.display == "flex") {
+                                dispMessage.style.display = "none";
+                            } else {
+                                dispMessage.style.display = "flex";
+                                dispMessage.innerHTML = `Song not found on Spotify: ${parts[1]} by ${artist}`;
+                            }
                         }
                     }
                     console.log('Playlist conversion complete.');
 
                 } catch (error) {
-                    console.error(error.message);
+                    // console.error(error.message);
+                    let dispMessage = document.getElementById("dispMessage");
+
+                    if (dispMessage.style.display == "flex") {
+                        dispMessage.style.display = "none";
+                    } else {
+                        dispMessage.style.display = "flex";
+                        dispMessage.innerHTML = error.message;
+                    }
                 }
             }
+        
             
             async function main() {
                 try {
@@ -224,7 +312,15 @@
                     convertYouTubePlaylistToSpotify(playlistId, playlistName);
                 
                     } catch (error) {
-                        console.error(error.message);
+                    // console.error(error.message);
+                    let dispMessage = document.getElementById("dispMessage");
+
+                    if (dispMessage.style.display == "flex") {
+                        dispMessage.style.display = "none";
+                    } else {
+                        dispMessage.style.display = "flex";
+                        dispMessage.innerHTML = "Error getting playlist name.";
+                    }
                 }
             }//End of main()
             
