@@ -87,7 +87,7 @@
         
         // Function to get YouTube playlist name
         async function getPlaylistName(playlistId) {
-            const apiKey = 'AIzaSyAmOeTSpgNxtwcWUbyYuVZfhmIrMDhmsil';
+            const apiKey = 'AIzaSyAmOeTSpgNxtwcWUbyYuVZfhmIrMDhmsiI';
             const apiUrl = `https://www.googleapis.com/youtube/v3/playlists?key=${apiKey}&id=${playlistId}&part=id,snippet&fields=items(id,snippet(title,channelId,channelTitle))`;
         
             const response = await fetch(apiUrl);
@@ -255,7 +255,7 @@
                 convertYouTubePlaylistToSpotify(playlistId, playlistName);
             
                 } catch (error) {
-                showError("An error occurred.");
+                // showError("An error occurred.");
             }
         }
 
