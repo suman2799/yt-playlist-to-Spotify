@@ -210,7 +210,7 @@
 
         // Main function to convert YouTube playlist to Spotify playlist
         async function convertYouTubePlaylistToSpotify(youtubePlaylistId, spotifyPlaylistName) {
-            try {
+            // try {
                 const youtubePlaylistData = await fetchYouTubePlaylistData(youtubePlaylistId);
                 const spotifyPlaylistId = await createSpotifyPlaylist(spotifyPlaylistName);
 
@@ -231,13 +231,13 @@
                 }
                 console.log('Playlist conversion complete.');
 
-            } catch (error) {
-                showError(error.message);
-            }
+            // } catch (error) {
+            //     showError(error.message);
+            // }
         }
 
         async function main() {
-            try {
+            // try {
                 // Example usage:
                 // playlist URL
                 const playlistUrl = document.getElementById('playlistUrl').value;
@@ -257,9 +257,9 @@
             
                 convertYouTubePlaylistToSpotify(playlistId, playlistName);
             
-            } catch (error) {
-                showError(error.message);
-            }
+            // } catch (error) {
+            //     showError(error.message);
+            // }
         }
 
         main(); // Call the main function to start execution
