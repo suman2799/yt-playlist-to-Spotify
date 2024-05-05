@@ -44,12 +44,10 @@
                 const apiKey = 'AIzaSyAmOeTSpgNxtwcWUbyYuVZfhmIrMDhmsil';
                 const apiUrl = `https://www.googleapis.com/youtube/v3/playlists?key=${apiKey}&id=${playlistId}&part=id,snippet&fields=items(id,snippet(title,channelId,channelTitle))`;
             
-                try {
-                    const response = await fetch(apiUrl);
-                    const data = await response.json();
+                const response = await fetch(apiUrl);
+                const data = await response.json();
                     
-                    return data.items[0].snippet.title;
-                } catch (error) {
+                if (response.status != 200) {
                     let dispAnswer = document.getElementById("dispAnswer");
 
                     if (dispAnswer.style.display == "flex") {
@@ -60,6 +58,8 @@
                     }
                     console.error('Error:', error);
                 }
+
+                return data.items[0].snippet.title;
             }
             
             // Function to create a new playlist on Spotify
