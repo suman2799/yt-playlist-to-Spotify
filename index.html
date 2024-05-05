@@ -205,7 +205,7 @@
             let errorMessage = document.getElementById("errorMessage");
             errorMessage.style.display = "block";
             errorMessage.innerHTML = message;
-            throw new Error(message); // Throw an error to stop execution
+            // throw new Error(message); // Throw an error to stop execution
         }
 
         // Main function to convert YouTube playlist to Spotify playlist
@@ -258,7 +258,7 @@
                 convertYouTubePlaylistToSpotify(playlistId, playlistName);
             
             } catch (error) {
-                showError(showError(error.message););
+                showError(error.message);
             }
         }
 
