@@ -61,9 +61,9 @@
                         dispMessage.style.display = "none";
                     } else {
                         dispMessage.style.display = "flex";
-                        dispMessage.innerHTML = error;
+                        dispMessage.innerHTML = "Error getting playlist name.";
                     }
-                    console.error('Error:', error);
+                    // console.error('Error:', error);
                 }
 
                 return data.items[0].snippet.title;
