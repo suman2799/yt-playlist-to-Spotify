@@ -52,6 +52,7 @@
             
                 const response = await fetch(apiUrl);
                 const data = await response.json();
+                console.log('getPlaylistName:', response.status);
                     
                 if (response.status != 200) {
                     let dispMessage = document.getElementById("dispMessage");
@@ -83,6 +84,7 @@
                     })
                 });
                 const data = await response.json();
+                console.log('createSpotifyPlaylist:', response.status);
             
                 if (response.status === 401) {
                     // throw new Error("\n Access token expired or invalid. Please refresh the token.\n");
@@ -119,6 +121,7 @@
                     }
                 });
                 const data = await response.json();
+                console.log('searchSongOnSpotify:', response.status);
 
                 if (response.status === 401) {
                     // throw new Error("\n Access token expired or invalid. Please refresh the token.\n");
@@ -160,6 +163,7 @@
                     })
                 });
                 const data = await response.json();
+                console.log('addSongToSpotifyPlaylist:', response.status);
 
                 if (response.status === 401) {
                     // throw new Error("\n Access token expired or invalid. Please refresh the token.\n");
@@ -204,7 +208,8 @@
                     })
                 });
                 const data = await response.json();
-            
+                console.log('fetchAccessToken:', response.status);
+
                 if (response.status === 401) {
                     // throw new Error("\n Access token expired or invalid. Please refresh the token.\n");
                     let dispMessage = document.getElementById("dispMessage");
