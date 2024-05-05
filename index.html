@@ -10,7 +10,7 @@
 
     <style>
 
-        #dispAnswer {
+        #dispMessage {
             display: none;
             color: #4b4a4a;
             justify-content: center;
@@ -48,13 +48,13 @@
                 const data = await response.json();
                     
                 if (response.status != 200) {
-                    let dispAnswer = document.getElementById("dispAnswer");
+                    let dispMessage = document.getElementById("dispAnswer");
 
-                    if (dispAnswer.style.display == "flex") {
-                        dispAnswer.style.display = "none";
+                    if (dispMessage.style.display == "flex") {
+                        dispMessage.style.display = "none";
                     } else {
-                        dispAnswer.style.display = "flex";
-                        dispAnswer.innerHTML = error;
+                        dispMessage.style.display = "flex";
+                        dispMessage.innerHTML = error;
                     }
                     console.error('Error:', error);
                 }
