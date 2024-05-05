@@ -54,7 +54,7 @@
                 const data = await response.json();
                 console.log('getPlaylistName:', response.status);
                     
-                if (response.status != 200) {
+                if (response.status < 200 || response.status >= 300) {
                     let dispMessage = document.getElementById("dispMessage");
 
                     if (dispMessage.style.display == "flex") {
@@ -97,7 +97,7 @@
                         dispMessage.innerHTML = "Access token expired or invalid. Please refresh the token.";
                     }
                 }
-                else if (response.status != 200) {
+                else if (response.status < 200 || response.status >= 300) {
                     let dispMessage = document.getElementById("dispMessage");
 
                     if (dispMessage.style.display == "flex") {
@@ -134,7 +134,7 @@
                         dispMessage.innerHTML = "Access token expired or invalid. Please refresh the token.";
                     }
                 }
-                else if (response.status != 200) {
+                else if (response.status < 200 || response.status >= 300) {
                     let dispMessage = document.getElementById("dispMessage");
 
                     if (dispMessage.style.display == "flex") {
@@ -176,7 +176,7 @@
                         dispMessage.innerHTML = "Access token expired or invalid. Please refresh the token.";
                     }
                 }
-                else if (response.status != 200) {
+                else if (response.status < 200 || response.status >= 300) {
                     let dispMessage = document.getElementById("dispMessage");
 
                     if (dispMessage.style.display == "flex") {
@@ -221,7 +221,7 @@
                         dispMessage.innerHTML = "Error exchanging authorization code for access token.";
                     }
                 }
-                else if (response.status != 200) {
+                else if (response.status < 200 || response.status >= 300) {
                     let dispMessage = document.getElementById("dispMessage");
 
                     if (dispMessage.style.display == "flex") {
