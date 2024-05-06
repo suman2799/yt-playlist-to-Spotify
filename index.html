@@ -154,24 +154,31 @@
 
             const apiUrl = `https://api.spotify.com/v1/search?q=${songTitle}+${artist}&type=track`;
 
-            const response = await fetch(apiUrl, {
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
+            try {
+                const response = await fetch(apiUrl, {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                });
+                const data = await response.json();
+
+                if (response.status === 401) {
+                    showError("Access token expired or invalid. Please refresh the token.");
+                } else if (response.status < 200 || response.status >= 300) {
+                    showError("Error searching song on Spotify.");
                 }
-            });
-            const data = await response.json();
 
-            if (!response.ok) {
-                showError("Failed to fetch data from Spotify API.");
+                return data.tracks.items[0]; // Return the first search result
+                
+            } catch (error) {
+                // Handle specific CORS error
+                if (error.name === 'TypeError' && error.message === 'Failed to fetch') {
+                    showError("CORS policy restricts access to the Spotify API. Please try again later.");
+                } else {
+                    showError("Error searching song on Spotify.");
+                }
+                throw error; // Rethrow the error for further handling if needed
             }
-
-            if (response.status === 401) {
-                showError("Access token expired or invalid. Please refresh the token.");
-            } else if (response.status < 200 || response.status >= 300) {
-                showError("Error searching song on Spotify.");
-            }
-
-            return data.tracks.items[0]; // Return the first search result
         }
 
         // Function to add a song to a Spotify playlist
