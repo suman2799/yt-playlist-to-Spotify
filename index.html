@@ -140,9 +140,9 @@
         }
         
         // Function to create a new playlist on Spotify
-        async function createSpotifyPlaylist(playlistName, userId) {
-            // const apiUrl = `https://api.spotify.com/v1/me/playlists`;
-            const apiUrl = `https://api.spotify.com/v1/users/${userId}/playlists`;
+        async function createSpotifyPlaylist(playlistName) {
+            const apiUrl = `https://api.spotify.com/v1/me/playlists`;
+            // const apiUrl = `https://api.spotify.com/v1/users/${userId}/playlists`;
         
             const response = await fetch(apiUrl, {
                 method: 'POST',
@@ -250,10 +250,10 @@
         }
 
         // Main function to convert YouTube playlist to Spotify playlist
-        async function convertYouTubePlaylistToSpotify(youtubePlaylistId, spotifyPlaylistName, spotifyUserId) {
+        async function convertYouTubePlaylistToSpotify(youtubePlaylistId, spotifyPlaylistName) {
             try {
                 const youtubePlaylistData = await fetchYouTubePlaylistData(youtubePlaylistId);
-                const spotifyPlaylistId = await createSpotifyPlaylist(spotifyPlaylistName, spotifyUserId);
+                const spotifyPlaylistId = await createSpotifyPlaylist(spotifyPlaylistName);
 
                 const lastIndex = youtubePlaylistData.length - 5;
                 for (const item of youtubePlaylistData.slice(0, lastIndex)) {
@@ -308,10 +308,10 @@
                 const playlistName = await getPlaylistName(playlistId);
             
                 // Get the user ID
-                const userId = await getUserId(accessToken);
-                console.log('User ID:', userId);
+                // const userId = await getUserId(accessToken);
+                // console.log('User ID:', userId);
 
-                convertYouTubePlaylistToSpotify(playlistId, playlistName, userId);
+                convertYouTubePlaylistToSpotify(playlistId, playlistName);
             
             } catch (error) {
                 // showError(error.message);
@@ -368,7 +368,7 @@
 
         // Function to open Spotify authentication page
         function loginWithSpotify() {
-            const scopes = 'user-read-private user-library-modify playlist-modify-private'; // Add any required scopes
+            const scopes = 'user-read-private user-library-modify playlist-modify-public playlist-modify-private'; // Add any required scopes
             const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUriLogin)}&scope=${encodeURIComponent(scopes)}&response_type=code&show_dialog=true`;
 
             // Open Spotify authentication page in a new window
