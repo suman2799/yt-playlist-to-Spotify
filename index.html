@@ -21,6 +21,7 @@
         .container {
             max-width: 500px;
             width: 100%;
+            margin: 30px;
             padding: 20px;
             border-radius: 10px;
             background-color: #1DB954; /* Spotify's green accent color */
@@ -91,7 +92,9 @@
 
         // Function to obtain YouTube playlist data
         async function fetchYouTubePlaylistData(playlistId) {
-            const apiKey = 'AIzaSyAmOeTSpgNxtwcWUbyYuVZfhmIrMDhmsiI';
+            // const apiKey = 'AIzaSyAmOeTSpgNxtwcWUbyYuVZfhmIrMDhmsiI';
+            const apiKey = 'AIzaSyAmOeTSpgNxtwcWUbyYuVZfhmIrMDhmsil';
+
             const apiUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${playlistId}&key=${apiKey}`;
 
             const response = await fetch(apiUrl);
