@@ -1,0 +1,11 @@
+{
+  "name": "yt_playlist-to-spotify",
+  "version": "1.0.0",
+  "main": "test.js",
+  "scripts": {
+    "build": "webpack --mode production"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
