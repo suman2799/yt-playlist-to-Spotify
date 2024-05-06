@@ -90,6 +90,24 @@
         
         let accessToken;
 
+        // Function to get Spotify userId
+        async function getUserId(accessToken) {
+            const apiUrl = 'https://api.spotify.com/v1/me';
+
+            const response = await fetch(apiUrl, {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            });
+
+            if (response.ok) {
+                const userData = await response.json();
+                return userData.id; // Return the user ID
+            } else {
+                showError("Error fetching user ID from Spotify");
+            }
+        }
+
         // Function to obtain YouTube playlist data
         async function fetchYouTubePlaylistData(playlistId) {
             const apiKey = 'AIzaSyAmOeTSpgNxtwcWUbyYuVZfhmIrMDhmsiI';
@@ -122,8 +140,9 @@
         }
         
         // Function to create a new playlist on Spotify
-        async function createSpotifyPlaylist(playlistName) {
-            const apiUrl = `https://api.spotify.com/v1/me/playlists`;
+        async function createSpotifyPlaylist(playlistName, userId) {
+            // const apiUrl = `https://api.spotify.com/v1/me/playlists`;
+            const apiUrl = `https://api.spotify.com/v1/users/${userId}/playlists`;
         
             const response = await fetch(apiUrl, {
                 method: 'POST',
@@ -231,10 +250,10 @@
         }
 
         // Main function to convert YouTube playlist to Spotify playlist
-        async function convertYouTubePlaylistToSpotify(youtubePlaylistId, spotifyPlaylistName) {
+        async function convertYouTubePlaylistToSpotify(youtubePlaylistId, spotifyPlaylistName, spotifyUserId) {
             try {
                 const youtubePlaylistData = await fetchYouTubePlaylistData(youtubePlaylistId);
-                const spotifyPlaylistId = await createSpotifyPlaylist(spotifyPlaylistName);
+                const spotifyPlaylistId = await createSpotifyPlaylist(spotifyPlaylistName, spotifyUserId);
 
                 const lastIndex = youtubePlaylistData.length - 5;
                 for (const item of youtubePlaylistData.slice(0, lastIndex)) {
@@ -285,10 +304,14 @@
                 
                 // Access Token
                 accessToken = await fetchAccessToken(code);
-            
+
                 const playlistName = await getPlaylistName(playlistId);
             
-                convertYouTubePlaylistToSpotify(playlistId, playlistName);
+                // Get the user ID
+                const userId = await getUserId(accessToken);
+                console.log('User ID:', userId);
+
+                convertYouTubePlaylistToSpotify(playlistId, playlistName, userId);
             
             } catch (error) {
                 // showError(error.message);
