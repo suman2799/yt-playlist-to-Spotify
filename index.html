@@ -84,6 +84,9 @@
         // Get login and playlist containers
         const loginContainer = document.getElementById('loginContainer');
         const playlistContainer = document.getElementById('playlistContainer');
+        console.log(loginContainer.style.display);
+        console.log(playlistContainer.style.display);
+
 
         // If code exists and login container is visible, hide login container and show playlist container
         if (code && loginContainer.style.display !== 'none') {
