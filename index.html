@@ -150,6 +150,9 @@
 
         // Function to search for a song on Spotify
         async function searchSongOnSpotify(songTitle, artist) {
+            console.log(artist);
+            console.log(songTitle);
+            
             const apiUrl = `https://api.spotify.com/v1/search?q=${songTitle}+${artist}&type=track`;
 
             const response = await fetch(apiUrl, {
