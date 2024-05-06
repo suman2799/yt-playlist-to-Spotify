@@ -78,26 +78,26 @@
     <script>
 
         // Check if URL has authentication code
-        const urlParams = new URLSearchParams(window.location.search);
-        const code = urlParams.get('code');
+        // const urlParams = new URLSearchParams(window.location.search);
+        // const code = urlParams.get('code');
 
-        // Get login and playlist containers
-        const loginContainer = document.getElementById('loginContainer');
-        const playlistContainer = document.getElementById('playlistContainer');
-        console.log(loginContainer.style.display);
-        console.log(playlistContainer.style.display);
+        // // Get login and playlist containers
+        // const loginContainer = document.getElementById('loginContainer');
+        // const playlistContainer = document.getElementById('playlistContainer');
+        // console.log(loginContainer.style.display);
+        // console.log(playlistContainer.style.display);
 
 
-        // If code exists and login container is visible, hide login container and show playlist container
-        if (code && loginContainer.style.display !== 'none') {
-            loginContainer.style.display = 'none';
-            playlistContainer.style.display = 'block';
-        }
-        // If code does not exist and playlist container is visible, hide playlist container and show login container
-        else if (!code && playlistContainer.style.display !== 'none') {
-            loginContainer.style.display = 'block';
-            playlistContainer.style.display = 'none';
-        }
+        // // If code exists and login container is visible, hide login container and show playlist container
+        // if (code && loginContainer.style.display !== 'none') {
+        //     loginContainer.style.display = 'none';
+        //     playlistContainer.style.display = 'block';
+        // }
+        // // If code does not exist and playlist container is visible, hide playlist container and show login container
+        // else if (!code && playlistContainer.style.display !== 'none') {
+        //     loginContainer.style.display = 'block';
+        //     playlistContainer.style.display = 'none';
+        // }
 
         const clientId = '145abc96e9a3498f81ee180c0852430f';
         const redirectUriLogin = 'https://suman2799.github.io/yt-playlist-to-Spotify'; // GitHub Pages URL
