@@ -54,6 +54,16 @@
             background-color: #383838; /* Darker shade of Spotify's background color */
         }
 
+        .wait {
+            background-color: #ffbb00; /* Blue background */
+            color: #FFFFFF; /* White text */
+            font-weight: bold;
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            display: none; /* Initially hidden */
+        }
+
         .message {
             background-color: #007bff; /* Blue background */
             color: #FFFFFF; /* White text */
@@ -248,6 +258,11 @@
 
         async function main() {
             try {
+
+                let waitMessage = document.getElementById("waitMessage");
+                waitMessage.style.display = "block";
+                waitMessage.innerHTML = "Please wait a while...";
+
                 // Example usage:
                 // playlist URL
                 const playlistUrl = document.getElementById('playlistUrl').value;
@@ -291,6 +306,7 @@
             <input type="text" id="playlistUrl" name="playlistUrl">
         </div>
         <button onclick="main()">Submit</button>
+        <div class="wait" id="waitMessage" style="display: none;"></div>
         <div class="message" id="successMessage" style="display: none;"></div>
         <div class="error" id="errorMessage" style="display: none;"></div>
     </div>
@@ -304,9 +320,6 @@
         // Get login and playlist containers
         const loginContainer = document.getElementById('loginContainer');
         const playlistContainer = document.getElementById('playlistContainer');
-        console.log(loginContainer.style.display);
-        console.log(playlistContainer.style.display);
-
 
         // If code exists and login container is visible, hide login container and show playlist container
         if (code && loginContainer.style.display !== 'none') {
@@ -333,7 +346,7 @@
 
         // Event listener for login button click
         document.getElementById('loginBtn').addEventListener('click', loginWithSpotify);
-        
+
     </script>
 </body>
 </html>
