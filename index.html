@@ -368,7 +368,7 @@
 
         // Function to open Spotify authentication page
         function loginWithSpotify() {
-            const scopes = 'user-read-private user-read-email playlist-modify-public playlist-modify-private'; // Add any required scopes
+            const scopes = 'user-read-private user-library-modify playlist-modify-public playlist-modify-private'; // Add any required scopes
             const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUriLogin)}&scope=${encodeURIComponent(scopes)}&response_type=code&show_dialog=true`;
 
             // Open Spotify authentication page in a new window
