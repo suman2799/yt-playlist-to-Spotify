@@ -247,6 +247,9 @@
                     }
                 }
                 // console.log('Playlist conversion complete.');
+                let waitMessage = document.getElementById("waitMessage");
+                waitMessage.style.display = "none";
+
                 let successMessage = document.getElementById("successMessage");
                 successMessage.style.display = "block";
                 successMessage.innerHTML = "Playlist conversion completed successfully.";
