@@ -92,8 +92,7 @@
 
         // Function to obtain YouTube playlist data
         async function fetchYouTubePlaylistData(playlistId) {
-            // const apiKey = 'AIzaSyAmOeTSpgNxtwcWUbyYuVZfhmIrMDhmsiI';
-            const apiKey = 'AIzaSyAmOeTSpgNxtwcWUbyYuVZfhmIrMDhmsil';
+            const apiKey = 'AIzaSyAmOeTSpgNxtwcWUbyYuVZfhmIrMDhmsiI';
 
             const apiUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${playlistId}&key=${apiKey}`;
 
@@ -222,6 +221,9 @@
 
         // Function to display error message
         function showError(message) {
+            let waitMessage = document.getElementById("waitMessage");
+            waitMessage.style.display = "none";
+
             let errorMessage = document.getElementById("errorMessage");
             errorMessage.style.display = "block";
             errorMessage.innerHTML = message;
