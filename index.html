@@ -85,11 +85,13 @@
         const loginContainer = document.getElementById('loginContainer');
         const playlistContainer = document.getElementById('playlistContainer');
 
-        // If code exists, hide login container and show playlist container
-        if (code) {
+        // If code exists and login container is visible, hide login container and show playlist container
+        if (code && loginContainer.style.display !== 'none') {
             loginContainer.style.display = 'none';
             playlistContainer.style.display = 'block';
-        } else {
+        }
+        // If code does not exist and playlist container is visible, hide playlist container and show login container
+        else if (!code && playlistContainer.style.display !== 'none') {
             loginContainer.style.display = 'block';
             playlistContainer.style.display = 'none';
         }
