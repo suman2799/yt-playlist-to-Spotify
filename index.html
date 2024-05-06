@@ -237,7 +237,7 @@
                 const youtubePlaylistData = await fetchYouTubePlaylistData(youtubePlaylistId);
                 const spotifyPlaylistId = await createSpotifyPlaylist(spotifyPlaylistName);
 
-                const lastIndex = youtubePlaylistData.length - 5;
+                const lastIndex = youtubePlaylistData.length;
                 for (const item of youtubePlaylistData.slice(0, lastIndex)) {
                     const title = item.snippet.title;
 
