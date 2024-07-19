@@ -369,6 +369,7 @@
                         let newMessageDiv = document.createElement("div");
                         newMessageDiv.classList.add("wait");
                         newMessageDiv.innerHTML = `Song added: ${parts[1]} by ${artist}`;
+                        newMessageDiv.style.display = "block"; // Set display style to block
 
                         let waitMessage = document.getElementById("waitMessageContainer");
                         // waitMessage.style.display = "block";
