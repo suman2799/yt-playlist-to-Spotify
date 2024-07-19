@@ -367,12 +367,12 @@
 
                         // Create a new div for the message
                         let newMessageDiv = document.createElement("div");
-                        newMessageDiv.classList.add("waitMessage");
+                        newMessageDiv.classList.add("wait");
                         newMessageDiv.innerHTML = `Song added: ${parts[1]} by ${artist}`;
 
-                        let waitMessage = document.getElementById("waitMessage");
-                        waitMessage.style.display = "block";
-                        waitMessage.appendChild(newMessageDiv);
+                        let waitMessage = document.getElementById("waitMessageContainer");
+                        // waitMessage.style.display = "block";
+                        waitMessageContainer.appendChild(newMessageDiv);
                         // waitMessage.innerHTML += `<br>Song added: ${parts[1]} by ${artist}`;
                     } else {
                         showError(`Song not found on Spotify: ${parts[1]} by ${artist}`);
@@ -441,7 +441,8 @@
             <input type="text" id="playlistUrl" name="playlistUrl">
         </div>
         <button onclick="main()">Submit</button>
-        <div class="wait" id="waitMessage" style="display: none;"></div>
+        <!-- <div class="wait" id="waitMessage" style="display: none;"></div> -->
+        <div id="waitMessageContainer"></div>
         <div class="message" id="successMessage" style="display: none;"></div>
         <div class="error" id="errorMessage" style="display: none;"></div>
     </div>
