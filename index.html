@@ -361,9 +361,9 @@
 
                         let waitMessage = document.getElementById("waitMessage");
                         waitMessage.style.display = "block";
-                        waitMessage.innerHTML = `Song added: ${parts[1]} by ${artist}`;
+                        waitMessage.innerHTML = `Song added: ${songTitle}`;
                     } else {
-                        showError(`Song not found on Spotify: ${parts[1]} by ${artist}`);
+                        showError(`Song not found on Spotify: ${songTitle}`);
                     }
                 }
                 
