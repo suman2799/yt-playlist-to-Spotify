@@ -371,7 +371,7 @@
                         newMessageDiv.innerHTML = `Song added: ${parts[1]} by ${artist}`;
                         newMessageDiv.style.display = "block"; // Set display style to block
 
-                        let waitMessage = document.getElementById("waitMessageContainer");
+                        let waitMessageContainer = document.getElementById("waitMessageContainer");
                         // waitMessage.style.display = "block";
                         waitMessageContainer.appendChild(newMessageDiv);
                         // waitMessage.innerHTML += `<br>Song added: ${parts[1]} by ${artist}`;
@@ -395,9 +395,19 @@
         async function main() {
             try {
 
-                let waitMessage = document.getElementById("waitMessage");
-                waitMessage.style.display = "block";
-                waitMessage.innerHTML = "Please wait a while...";
+                // Create a new div for the message
+                let newMessageDiv = document.createElement("div");
+                newMessageDiv.classList.add("wait");
+                newMessageDiv.innerHTML = 'Please wait a while...';
+                newMessageDiv.style.display = "block"; // Set display style to block
+
+                let waitMessageContainer = document.getElementById("waitMessageContainer");
+                // waitMessage.style.display = "block";
+                waitMessageContainer.appendChild(newMessageDiv);
+
+                // let waitMessage = document.getElementById("waitMessage");
+                // waitMessage.style.display = "block";
+                // waitMessage.innerHTML = "Please wait a while...";
 
                 // Example usage:
                 // playlist URL
