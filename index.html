@@ -202,6 +202,11 @@
             console.log(clientId)
         }
 
+        // Call fetchConfig to get the API keys
+        fetchConfig().then(() => {
+            // Your existing JavaScript functions can now use clientId, clientSecret, and youtubeApiKey
+        });
+
         // Function to obtain YouTube playlist data
         async function fetchYouTubePlaylistData(playlistId) {
             // const apiKey = '__YOUTUBE_API_KEY__';
