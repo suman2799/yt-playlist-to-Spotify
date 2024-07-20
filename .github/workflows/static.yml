@@ -32,6 +32,8 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Pages
         uses: actions/configure-pages@v5
+      - name: Print directory contents
+        run: ls -R
       - name: Replace secret placeholder
         run: |
           sed -i 's|__SPOTIFY_CLIENT_SECRET__|${{ secrets.SPOTIFY_CLIENT_SECRET }}|g' yt-playlist-to-Spotify/index.html
