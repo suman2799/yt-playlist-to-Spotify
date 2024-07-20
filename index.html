@@ -189,10 +189,21 @@
     <script>
         
         let accessToken;
+        let clientId;
+        let clientSecret;
+        let youtubeApiKey;
+
+        async function fetchConfig() {
+            const response = await fetch('path/to/config.php');
+            const data = await response.json();
+            clientId = data.SPOTIFY_CLIENT_ID;
+            clientSecret = data.SPOTIFY_CLIENT_SECRET;
+            youtubeApiKey = data.YOUTUBE_API_KEY;
+        }
 
         // Function to obtain YouTube playlist data
         async function fetchYouTubePlaylistData(playlistId) {
-            const apiKey = '__YOUTUBE_API_KEY__';
+            // const apiKey = '__YOUTUBE_API_KEY__';
 
             const apiUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${playlistId}&key=${apiKey}`;
 
@@ -208,7 +219,7 @@
         
         // Function to get YouTube playlist name
         async function getPlaylistName(playlistId) {
-            const apiKey = '__YOUTUBE_API_KEY__';
+            // const apiKey = '__YOUTUBE_API_KEY__';
             const apiUrl = `https://www.googleapis.com/youtube/v3/playlists?key=${apiKey}&id=${playlistId}&part=id,snippet&fields=items(id,snippet(title,channelId,channelTitle))`;
         
             const response = await fetch(apiUrl);
@@ -304,8 +315,8 @@
 
         // Function to get accessToken
         async function fetchAccessToken(code) {
-            const clientId = '__SPOTIFY_CLIENT_ID__';
-            const clientSecret = '__SPOTIFY_CLIENT_SECRET__';
+            // const clientId = '__SPOTIFY_CLIENT_ID__';
+            // const clientSecret = '__SPOTIFY_CLIENT_SECRET__';
             const redirectUri = 'https://suman2799.github.io/yt-playlist-to-Spotify'; // Your redirect URI
             const apiUrl = `https://accounts.spotify.com/api/token`;
         
@@ -455,7 +466,7 @@
             playlistContainer.style.display = 'none';
         }
 
-        const clientId = '__SPOTIFY_CLIENT_ID__';
+        // const clientId = '__SPOTIFY_CLIENT_ID__';
         const redirectUriLogin = 'https://suman2799.github.io/yt-playlist-to-Spotify'; // GitHub Pages URL
 
         // Function to open Spotify authentication page
