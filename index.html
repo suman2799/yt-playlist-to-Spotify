@@ -192,7 +192,7 @@
 
         // Function to obtain YouTube playlist data
         async function fetchYouTubePlaylistData(playlistId) {
-            const apiKey = 'AIzaSyAmOeTSpgNxtwcWUbyYuVZfhmIrMDhmsiI';
+            const apiKey = '__YOUTUBE_API_KEY__';
 
             const apiUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${playlistId}&key=${apiKey}`;
 
@@ -208,7 +208,7 @@
         
         // Function to get YouTube playlist name
         async function getPlaylistName(playlistId) {
-            const apiKey = 'AIzaSyAmOeTSpgNxtwcWUbyYuVZfhmIrMDhmsiI';
+            const apiKey = '__YOUTUBE_API_KEY__';
             const apiUrl = `https://www.googleapis.com/youtube/v3/playlists?key=${apiKey}&id=${playlistId}&part=id,snippet&fields=items(id,snippet(title,channelId,channelTitle))`;
         
             const response = await fetch(apiUrl);
@@ -304,7 +304,7 @@
 
         // Function to get accessToken
         async function fetchAccessToken(code) {
-            const clientId = '145abc96e9a3498f81ee180c0852430f';
+            const clientId = '__SPOTIFY_CLIENT_ID__';
             const clientSecret = '__SPOTIFY_CLIENT_SECRET__';
             const redirectUri = 'https://suman2799.github.io/yt-playlist-to-Spotify'; // Your redirect URI
             const apiUrl = `https://accounts.spotify.com/api/token`;
@@ -455,7 +455,7 @@
             playlistContainer.style.display = 'none';
         }
 
-        const clientId = '145abc96e9a3498f81ee180c0852430f';
+        const clientId = '__SPOTIFY_CLIENT_ID__';
         const redirectUriLogin = 'https://suman2799.github.io/yt-playlist-to-Spotify'; // GitHub Pages URL
 
         // Function to open Spotify authentication page
