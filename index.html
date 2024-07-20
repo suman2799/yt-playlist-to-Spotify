@@ -194,7 +194,7 @@
         let youtubeApiKey;
 
         async function fetchConfig() {
-            const response = await fetch('path/to/config.php');
+            const response = await fetch('backend.php');
             const data = await response.json();
             clientId = data.SPOTIFY_CLIENT_ID;
             clientSecret = data.SPOTIFY_CLIENT_SECRET;
