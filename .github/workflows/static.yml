@@ -34,11 +34,11 @@ jobs:
         uses: actions/configure-pages@v5
       - name: Print directory contents
         run: ls -R
-      - name: Replace secret placeholder
-        run: |
-          sed -i 's|__SPOTIFY_CLIENT_SECRET__|${{ secrets.SPOTIFY_CLIENT_SECRET }}|g' index.html
-          sed -i 's|__SPOTIFY_CLIENT_ID__|${{ secrets.SPOTIFY_CLIENT_ID }}|g' index.html
-          sed -i 's|__YOUTUBE_API_KEY__|${{ secrets.YOUTUBE_API_KEY }}|g' index.html
+      # - name: Replace secret placeholder
+      #   run: |
+      #     sed -i 's|__SPOTIFY_CLIENT_SECRET__|${{ secrets.SPOTIFY_CLIENT_SECRET }}|g' index.html
+      #     sed -i 's|__SPOTIFY_CLIENT_ID__|${{ secrets.SPOTIFY_CLIENT_ID }}|g' index.html
+      #     sed -i 's|__YOUTUBE_API_KEY__|${{ secrets.YOUTUBE_API_KEY }}|g' index.html
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
