@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convert YouTube Playlist to Spotify</title>
+
+    <style>
+
+        @font-face {
+            font-family: 'Circular';
+            /* src: url('CircularStd-Black.otf') format('opentype'); */
+            src: local(''),
+                    url('fonts/CircularStd-Black.otf') format('opentype');
+            font-weight: 900;
+        }
+
+        @font-face {
+            font-family: 'Circular';
+            /* src: url('CircularStd-BlackItalic.otf') format('opentype'); */
+            src: local(''),
+                    url('fonts/CircularStd-BlackItalic.otf') format('opentype');
+            font-style: italic;
+            font-weight: 900;
+        }
+
+        @font-face {
+            font-family: 'Circular';
+            /* src: url('CircularStd-Bold.otf') format('opentype'); */
+            src: local(''),
+                    url('fonts/CircularStd-Bold.otf') format('opentype');
+            font-weight: bold;
+        }
+
+        @font-face {
+            font-family: 'Circular';
+            /* src: url('CircularStd-BoldItalic.otf') format('opentype'); */
+            src: local(''),
+                    url('fonts/CircularStd-BoldItalic.otf') format('opentype');
+            font-style: italic;
+            font-weight: bold;
+        }
+
+        @font-face {
+            font-family: 'Circular';
+            /* src: url('CircularStd-Book.otf') format('opentype'); */
+            src: local(''),
+                    url('fonts/CircularStd-Book.otf') format('opentype');
+            font-weight: normal;
+        }
+
+        @font-face {
+            font-family: 'Circular';
+            /* src: url('CircularStd-BookItalic.otf') format('opentype'); */
+            src: local(''),
+                    url('fonts/CircularStd-BookItalic.otf') format('opentype');
+            font-style: italic;
+            font-weight: normal;
+        }
+
+        @font-face {
+            font-family: 'Circular';
+            /* src: url('CircularStd-Light.otf') format('opentype'); */
+            src: local(''),
+                    url('fonts/CircularStd-Light.otf') format('opentype');
+            font-weight: 300;
+        }
+
+        @font-face {
+            font-family: 'Circular';
+            /* src: url('CircularStd-LightItalic.otf') format('opentype'); */
+            src: local(''),
+                    url('fonts/CircularStd-LightItalic.otf') format('opentype');
+            font-style: italic;
+            font-weight: 300;
+        }
+
+        @font-face {
+            font-family: 'Circular';
+            /* src: url('CircularStd-Medium.otf') format('opentype'); */
+            src: local(''),
+                    url('fonts/CircularStd-Medium.otf') format('opentype');
+            font-weight: 500;
+        }
+
+        @font-face {
+            font-family: 'Circular';
+            /* src: url('CircularStd-MediumItalic.otf') format('opentype'); */
+            src: local(''),
+                    url('fonts/CircularStd-MediumItalic.otf') format('opentype');
+            font-style: italic;
+            font-weight: 500;
+        }
+
+        body {
+            font-family: "Circular", Arial, sans-serif; /* Spotify's font */
+            font-weight: 700;
+            background-color: #191414; /* Spotify's background color */
+            color: #FFFFFF; /* White text */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        h1 {
+            font-family: 'Circular';
+            letter-spacing: -2px;
+            display: block;
+            font-size: 2em;
+            margin-block-start: 0.67em;
+            margin-block-end: 0.67em;
+            margin-inline-start: 0px;
+            margin-inline-end: 0px;
+            font-weight: bolder;
+            unicode-bidi: isolate;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 100%;
+            margin: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #1DB954; /* Spotify's green accent color */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            width: 90%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+
+        button {
+            font-family: 'Circular';
+            font-weight: bolder;
+            font-size: x-large;
+            letter-spacing: -2px;
+            padding: 10px 20px;
+            background-color: #191414;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #383838; /* Darker shade of Spotify's background color */
+        }
+
+        .wait {
+            background-color: #ffbb00; /* Blue background */
+            color: #FFFFFF; /* White text */
+            font-weight: bold;
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            display: none; /* Initially hidden */
+        }
+
+        .message {
+            background-color: #007bff; /* Blue background */
+            color: #FFFFFF; /* White text */
+            font-weight: bold;
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            display: none; /* Initially hidden */
+        }
+
+        .error {
+            background-color: #FF4136; /* Spotify's red accent color */
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+    </style>
+
+</head>
+<body>
+    <!-- Login Button Container -->
+    <div class="container" id="loginContainer" style="display: block;">
+        <h1>YouTube Playlist to Spotify</h1>
+        <button id="loginBtn">Login with Spotify</button>
+    </div>
+
+    <!-- Playlist Conversion Container -->
+    <div class="container" id="playlistContainer" style="display: none;">
+        <h1>YouTube Playlist to Spotify</h1>
+        <div class="input-group">
+            <label for="playlistUrl">Enter YouTube Playlist URL:</label>
+            <input type="text" id="playlistUrl" name="playlistUrl">
+        </div>
+        <button onclick="main()">Submit</button>
+        <div class="wait" id="waitMessage" style="display: none;"></div>
+        <div class="message" id="successMessage" style="display: none;"></div>
+        <div class="error" id="errorMessage" style="display: none;"></div>
+    </div>
+
+    <script>
+
+        async function fetchYouTubePlaylistData(youtubePlaylistId) {
+            const response = await fetch('backend.php?action=fetchYouTubePlaylistData', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    'playlistId': youtubePlaylistId
+                })
+            });
+            const data = await response.json();
+            
+            if (response.status < 200 || response.status >= 300) {
+                showError("Error fetching YouTube playlist data.");
+            }
+
+            return data;
+        }
+
+        async function getPlaylistName(playlistId) {
+            const response = await fetch('backend.php?action=getPlaylistName', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    'playlistId': playlistId
+                })
+            });
+            const data = await response.json();
+
+            if (response.status < 200 || response.status >= 300) {
+                showError("Error getting playlist name.");
+            }
+
+            return data;
+        }
+
+        async function createSpotifyPlaylist(playlistName, accessToken) {
+            const response = await fetch('backend.php?action=createSpotifyPlaylist', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    'playlistName': playlistName,
+                    'accessToken': accessToken
+                })
+            });
+            const data = await response.json();
+
+            if (response.status >= 400) {
+                throw new Error(data.error || 'Failed to create Spotify playlist');
+            }
+
+            return data;
+        }
+
+        async function searchSongOnSpotify(songTitle, accessToken) {
+            const response = await fetch('backend.php?action=searchSongOnSpotify', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    'songTitle': songTitle,
+                    'accessToken': accessToken
+                })
+            });
+            const data = await response.json();
+
+            if (response.status >= 400) {
+                throw new Error(data.error || 'Failed to search song on Spotify');
+            }
+
+            return data;
+        }
+
+        async function addSongToSpotifyPlaylist(playlistId, trackUri, accessToken) {
+            const response = await fetch('backend.php?action=addSongToSpotifyPlaylist', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    'playlistId': playlistId,
+                    'trackUri': trackUri,
+                    'accessToken': accessToken
+                })
+            });
+            const data = await response.json();
+
+            if (response.status >= 400) {
+                throw new Error(data.error || 'Failed to add song to Spotify playlist');
+            }
+
+            return data;
+        }
+
+        async function fetchAccessToken(code) {
+            const response = await fetch('backend.php?action=fetchAccessToken', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    'code': code
+                })
+            });
+            const data = await response.json();
+
+            if (response.status >= 400) {
+                throw new Error(data.error || 'Failed to fetch access token');
+            }
+
+            return data.access_token;
+        }
+
+        async function convertYouTubePlaylistToSpotify(youtubePlaylistId, spotifyPlaylistName, accessToken) {
+            try {
+                const youtubePlaylistData = await fetchYouTubePlaylistData(youtubePlaylistId);
+                const spotifyPlaylist = await createSpotifyPlaylist(spotifyPlaylistName, accessToken);
+                
+                for (const item of youtubePlaylistData.items) {
+                    const title = item.snippet.title;
+                    const songTitle = title.replace(/[^a-zA-Z0-9\s]/g, '');
+
+                    const spotifyTrack = await searchSongOnSpotify(songTitle, accessToken);
+
+                    if (spotifyTrack) {
+                        await addSongToSpotifyPlaylist(spotifyPlaylist.playlistId, spotifyTrack.spotifyTrack.uri, accessToken);
+
+                        document.getElementById('waitMessage').innerHTML = `Song added: ${songTitle}`;
+                    } else {
+                        showError(`Song not found on Spotify: ${songTitle}`);
+                    }
+                }
+
+                document.getElementById('waitMessage').style.display = 'none';
+                document.getElementById('successMessage').style.display = 'block';
+                document.getElementById('successMessage').innerHTML = "Playlist conversion completed successfully.";
+            } catch (error) {
+                showError(error.message);
+            }
+        }
+
+        async function main() {
+            try {
+                document.getElementById('waitMessage').style.display = 'block';
+                document.getElementById('waitMessage').innerHTML = "Please wait a while...";
+
+                const playlistUrl = document.getElementById('playlistUrl').value;
+                const plIds = playlistUrl.match(/list=([a-zA-Z0-9_-]+)/);
+                const playlistId = plIds[1];
+
+                const urlParams = new URLSearchParams(window.location.search);
+                const code = urlParams.get('code');
+                const accessToken = await fetchAccessToken(code);
+                const playlistName = await getPlaylistName(playlistId);
+                convertYouTubePlaylistToSpotify(playlistId, playlistName.playlistName, accessToken);
+            } catch (error) {
+                showError(error.message);
+            }
+        }
+
+        function showError(message) {
+            document.getElementById('errorMessage').style.display = 'block';
+            document.getElementById('errorMessage').innerHTML = message;
+        }
+
+        document.getElementById('loginBtn').addEventListener('click', async () => {
+            const response = await fetch('backend.php?action=getURL');
+            const data = await response.json();
+
+            if (response.status >= 400) {
+                throw new Error(data.error || 'Failed to fetch URL');
+            }
+
+            window.open(data.authUrl, '_self');
+        });
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+
+        if (code) {
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('playlistContainer').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
